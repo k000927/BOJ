@@ -30,12 +30,12 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        String ttt = ".........";
+        String ttt = "........."; //초기 상태
         String[] XO = {"X", "O"};
 
-        ArrayList<node> arr = new ArrayList<>();
-        ArrayList<String> visited = new ArrayList<>();
-        arr.add(new node(ttt, 0));
+        ArrayList<node> arr = new ArrayList<>(); // 후보군들을 담을 배열
+        ArrayList<String> visited = new ArrayList<>(); // 중복 제거를 위한 배열
+        arr.add(new node(ttt, 0)); // 틱택토 배열과 현재 순번 저장
 
         while (!arr.isEmpty()) {
             node cur = arr.remove(0);

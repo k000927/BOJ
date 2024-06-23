@@ -11,6 +11,7 @@ public class Main {
         for (int i = 0; i < n; i++) {
             kids[i] = Integer.parseInt(br.readLine());
         }
+
         int[] dp = new int[n];
         dp[0] = 1;
         int ans = 1;

@@ -37,6 +37,7 @@ public class Main {
             // 5. lawyer가 용의자 중에 있을 경우
         else if (suspects.contains("lawyer")) System.out.println("lawyer");
         else if (suspects.isEmpty()) System.out.println("swi");
+            // 6. 사전 순 출력
         else System.out.println(suspects.poll());
     }
 }

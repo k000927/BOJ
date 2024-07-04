@@ -29,6 +29,8 @@ public class Main {
 
         if (dongho) System.out.println("dongho");
             // 2. 용의자가 한 명일 경우
+            // 용의자가 없으면 swi가 범인
+        else if (suspects.isEmpty()) System.out.println("swi");
         else if (suspects.size() == 1) System.out.println(suspects.poll());
             // 3. bumin이 용의자 중에 있을 경우
         else if (suspects.contains("bumin")) System.out.println("bumin");
@@ -36,7 +38,6 @@ public class Main {
         else if (suspects.contains("cake")) System.out.println("cake");
             // 5. lawyer가 용의자 중에 있을 경우
         else if (suspects.contains("lawyer")) System.out.println("lawyer");
-        else if (suspects.isEmpty()) System.out.println("swi");
             // 6. 사전 순 출력
         else System.out.println(suspects.poll());
     }

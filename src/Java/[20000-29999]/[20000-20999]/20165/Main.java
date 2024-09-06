@@ -33,32 +33,32 @@ public class Main {
         }
     }
 
-    static void pushDomino(int x, int y, String d) {
-        ArrayDeque<Node> dominoDeque = new ArrayDeque<>();
-        dominoDeque.push(new Node(x, y));
-        int dir = switch (d) {
-            case "E" -> 0;
-            case "W" -> 1;
-            case "S" -> 2;
-            default -> 3;
-        };
+static void pushDomino(int x, int y, String d) {
+    ArrayDeque<Node> dominoDeque = new ArrayDeque<>();
+    dominoDeque.push(new Node(x, y));
+    int dir = switch (d) {
+        case "E" -> 0;
+        case "W" -> 1;
+        case "S" -> 2;
+        default -> 3;
+    };
 
-        while (!dominoDeque.isEmpty()) {
-            Node node = dominoDeque.pop();
-            int k = domino[node.x][node.y];
+    while (!dominoDeque.isEmpty()) {
+        Node node = dominoDeque.pop();
+        int k = domino[node.x][node.y];
 
-            for (int i = 0; i < k; i++) {
-                int nextX = node.x + dx[dir] * i;
-                int nextY = node.y + dy[dir] * i;
-                if (nextX < 0 || nextX >= n || nextY < 0 || nextY >= m) break;
-                if (!ForS[nextX][nextY]) continue;
+        for (int i = 0; i < k; i++) {
+            int nextX = node.x + dx[dir] * i;
+            int nextY = node.y + dy[dir] * i;
+            if (nextX < 0 || nextX >= n || nextY < 0 || nextY >= m) break;
+            if (!ForS[nextX][nextY]) continue;
 
-                ForS[nextX][nextY] = false;
-                ans++;
-                dominoDeque.push(new Node(nextX, nextY));
-            }
+            ForS[nextX][nextY] = false;
+            ans++;
+            dominoDeque.push(new Node(nextX, nextY));
         }
     }
+}
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

@@ -6,7 +6,7 @@ public class Main {
     static int m;
     static long[] mod;
     static long[] num;
-    static long ans;
+    static int ans;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

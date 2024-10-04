@@ -5,6 +5,8 @@ public class Main {
     static StringTokenizer st;
     static int n;
     static int m;
+    static int a;
+    static int b;
     static int[] parent;
 
     static int find(int x) {
@@ -36,8 +38,8 @@ public class Main {
         int ans = 0;
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
 
             if (union(a, b) && !flag) {
                 ans = i + 1;

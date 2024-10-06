@@ -11,7 +11,7 @@ public class Main {
     static Node[][] parent;
     static HashMap<String, Integer> dir;
 
-    static class Node implements Comparable<Node> {
+    static class Node {
         int x;
         int y;
 
@@ -31,12 +31,6 @@ public class Main {
         @Override
         public int hashCode() {
             return Objects.hash(x, y);
-        }
-
-        @Override
-        public int compareTo(Node o) {
-            if (this.x != o.x) return this.x - o.x;
-            else return this.y - o.y;
         }
     }
 

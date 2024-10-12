@@ -64,9 +64,6 @@ public class Main {
     }
 
     static void brainFuck() throws IOException {
-        byteArray = new int[32768];
-        pointer = 0;
-
         StringBuilder instBuilder = new StringBuilder();
         String temp = "";
         while (!(temp = br.readLine()).equals("end")) {
@@ -98,6 +95,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         T = Integer.parseInt(br.readLine());
         for (int i = 1; i <= T; i++) {
+            byteArray = new int[32768];
+            pointer = 0;
             bw.write("PROGRAM #" + i + ":\n");
             brainFuck();
             bw.write('\n');

@@ -8,11 +8,10 @@ public class Main {
     static BufferedWriter bw;
     static Prob[] problems;
     static ArrayList<Integer>[] adj;
-    static PriorityQueue<Integer> ans = new PriorityQueue<>();
     static int index = 0;
 
 
-    static class Prob implements Comparable<Prob> {
+    static class Prob {
         int probNum;
         int inDegree;
         boolean visited;
@@ -21,29 +20,6 @@ public class Main {
             this.probNum = probNum;
             this.inDegree = 0;
             visited = false;
-        }
-
-        @Override
-        public int compareTo(Prob o) {
-            return this.probNum - o.probNum;
-        }
-    }
-
-    static void setAns() {
-        for (int i = 1; i < n + 1; i++) {
-            if (problems[i].inDegree == 0 && !problems[i].visited) ans.add(i);
-        }
-    }
-
-    static void solveProb() throws IOException {
-        while (!ans.isEmpty()) {
-            int curP = ans.poll();
-            index++;
-            bw.write(curP + " ");
-            problems[curP].visited = true;
-            for (Integer i : adj[curP]) {
-                problems[i].inDegree--;
-            }
         }
     }
 
@@ -73,7 +49,7 @@ public class Main {
         while (index++ < n) {
             int probNum = -1;
             for (int i = 1; i < n + 1; i++) {
-                if(problems[i].inDegree == 0 && !problems[i].visited){
+                if (problems[i].inDegree == 0 && !problems[i].visited) {
                     probNum = i;
                     break;
                 }
@@ -85,7 +61,6 @@ public class Main {
                 problems[i].inDegree--;
             }
         }
-
 
         bw.write("\n");
         bw.flush();

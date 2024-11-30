@@ -36,7 +36,7 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
         for (int i = line.length() - 1; i >= 0; i--) {
-            if (line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*' || line.charAt(i) == '/') {
+            if (prior.containsKey(line.charAt(i))) {
                 exp.add(sb.reverse().toString());
                 exp.add(String.valueOf(line.charAt(i)));
                 sb = new StringBuilder();
@@ -59,7 +59,7 @@ public class Main {
             }
 
             exp.clear();
-            while(!deque.isEmpty()) {
+            while (!deque.isEmpty()) {
                 exp.add(deque.pop());
             }
         }

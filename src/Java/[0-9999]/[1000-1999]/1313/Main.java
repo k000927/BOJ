@@ -1,5 +1,4 @@
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class Main {
@@ -59,6 +58,7 @@ public class Main {
         for (int i = 0; i < T; i++) {
             sb.append(ans[Integer.parseInt(br.readLine())]).append("\n");
         }
+
         System.out.println(sb);
     }
 }

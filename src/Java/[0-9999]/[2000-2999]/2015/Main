@@ -1,0 +1,41 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int n;
+	static int k;
+	static long ans = 0;
+	static HashMap<Long, Integer> sumCountMap = new HashMap<>(); // key: sum, value: count
+
+	public static void main(String[] args) throws IOException {
+		final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		n = Integer.parseInt(st.nextToken());
+		k = Integer.parseInt(st.nextToken());
+
+		long sum = 0;
+
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < n; i++) {
+			sum += Integer.parseInt(st.nextToken());
+
+			if (sumCountMap.containsKey(sum - k))
+				ans += sumCountMap.get(sum - k);
+
+			if (sumCountMap.containsKey(sum)) {
+				sumCountMap.put(sum, sumCountMap.get(sum) + 1);
+			} else {
+				sumCountMap.put(sum, 1);
+			}
+
+			if (sum == k)
+				ans++;
+
+		}
+		System.out.println(ans);
+	}
+}

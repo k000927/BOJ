@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 /*
@@ -9,91 +10,92 @@ import java.util.PriorityQueue;
  * 		- from: 출발 노드
  * 		- to: 도착 노드, 무향 그래프이므로 출발과 도착 노드 구분의 의미는 없지만 편의상 구분
  * 		- weight: 가중치, 정렬 기준이 됨
- * 
- * 크루스칼 알고리즘을 적용하여 풀이
- * 
+ *
+ * 프림 알고리즘을 적용하여 풀이
+ *
  */
 
 public class Main {
-	static final StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+    static final StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
 
-	// 정점의 개수
-	static int N;
-	// 간선의 개수
-	static int M;
-	// 각 집합의 대푯값
-	static int[] parents;
+    // 정점의 개수
+    static int V;
+    // 간선의 개수
+    static int E;
+    // 방문 여부
+    static boolean[] visited;
+    // 최소 길이 배열
+    static int[] minEdge;
+    // 가중치 배열
+    static ArrayList<ArrayList<Edge>> cost;
 
-	static class Edge implements Comparable<Edge> {
-		int from, to, weight;
+    static class Edge implements Comparable<Edge> {
+        int to, weight;
 
-		Edge(int from, int to, int weight) {
-			this.from = from;
-			this.to = to;
-			this.weight = weight;
-		}
+        Edge(int to, int weight) {
+            this.to = to;
+            this.weight = weight;
+        }
 
-		@Override
-		public int compareTo(Edge e) {
-			return Integer.compare(this.weight, e.weight);
-		}
-	}
+        @Override
+        public int compareTo(Edge e) {
+            return Integer.compare(this.weight, e.weight);
+        }
+    }
 
-	static int find(int x) {
-		if (parents[x] == x)
-			return x;
-		return parents[x] = find(parents[x]);
-	}
+    static int prim() {
+        int result = 0;
 
-	static boolean union(int x, int y) {
-		x = find(x);
-		y = find(y);
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        pq.add(new Edge(1, 0));
 
-		if (x == y)
-			return false;
+        int count = 0;
 
-		if (x > y)
-			parents[y] = x;
-		else
-			parents[x] = y;
-		return true;
-	}
+        while (count < V) {
+            Edge e = pq.poll();
 
-	static int kruskal(PriorityQueue<Edge> pq) {
-		int edgeCount = 0;
-		int edgeSum = 0;
+            if (visited[e.to])
+                continue;
 
-		while (edgeCount < N - 1) {
-			Edge e = pq.poll();
+            visited[e.to] = true;
+            count++;
+            result += e.weight;
 
-			if (union(e.from, e.to)) {
-				edgeCount++;
-				edgeSum += e.weight;
-			}
-		}
+            for (Edge n : cost.get(e.to)) {
+                if (!visited[n.to] && minEdge[n.to] > n.weight) {
+                    minEdge[n.to] = n.weight;
+                    pq.add(n);
+                }
+            }
+        }
+        return result;
+    }
 
-		return edgeSum;
-	}
+    public static void main(String[] args) throws NumberFormatException, IOException {
+        V = nextInt();
+        E = nextInt();
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		N = nextInt();
-		M = nextInt();
-		parents = new int[N + 1];
+        visited = new boolean[V + 1];
+        minEdge = new int[V + 1];
+        cost = new ArrayList<>();
+        for (int i = 0; i <= V; i++) {
+            minEdge[i] = Integer.MAX_VALUE;
+            cost.add(new ArrayList<>());
+        }
 
-		for (int i = 1; i <= N; i++) {
-			parents[i] = i;
-		}
+        for (int i = 0; i < E; i++) {
+            int from = nextInt();
+            int to = nextInt();
+            int weight = nextInt();
+            cost.get(from).add(new Edge(to, weight));
+            cost.get(to).add(new Edge(from, weight));
+        }
 
-		PriorityQueue<Edge> pq = new PriorityQueue<>();
-		for (int i = 0; i < M; i++) {
-			pq.add(new Edge(nextInt(), nextInt(), nextInt()));
-		}
+        System.out.println(prim());
+    }
 
-		System.out.println(kruskal(pq));
-	}
-
-	static private int nextInt() throws IOException {
-		st.nextToken();
-		return (int) st.nval;
-	}
+    static private int nextInt() throws IOException {
+        st.nextToken();
+        return (int) st.nval;
+    }
 }

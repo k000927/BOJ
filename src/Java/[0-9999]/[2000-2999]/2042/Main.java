@@ -1,21 +1,24 @@
 import java.io.*;
 import java.util.*;
 
+/*
+ * 세그먼트 트리를 이용한 풀이
+ */
 public class Main {
-    static int n;
-    static int m;
-    static int k;
+    static int N;
+    static int M;
+    static int K;
     static long[] num;
     static long[] tree;
-    static StringBuilder ans = new StringBuilder();
+    static final StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
 
     static void segTree(int node, int start, int end) {
         if (start == end) {
             tree[node] = num[start];
         } else {
-            segTree(node * 2, start, (start + end) / 2);
-            segTree(node * 2 + 1, (start + end) / 2 + 1, end);
-            tree[node] = tree[node * 2] + tree[node * 2 + 1];
+            segTree(node << 1, start, (start + end) >> 1);
+            segTree((node << 1) + 1, ((start + end) >> 1) + 1, end);
+            tree[node] = tree[node << 1] + tree[(node << 1) + 1];
         }
     }
 
@@ -30,9 +33,9 @@ public class Main {
             return;
         }
 
-        updateSeg(node * 2, start, (start + end) / 2, index, val);
-        updateSeg(node * 2 + 1, (start + end) / 2 + 1, end, index, val);
-        tree[node] = tree[node * 2] + tree[node * 2 + 1];
+        updateSeg(node << 1, start, (start + end) >> 1, index, val);
+        updateSeg((node << 1) + 1, ((start + end) >> 1) + 1, end, index, val);
+        tree[node] = tree[node << 1] + tree[(node << 1) + 1];
     }
 
     static long getSeg(int node, int start, int end, int left, int right) {
@@ -40,36 +43,37 @@ public class Main {
         if (left <= start && end <= right) {
             return tree[node];
         }
-        long lSum = getSeg(node * 2, start, (start + end) / 2, left, right);
-        long rSum = getSeg(node * 2 + 1, (start + end) / 2 + 1, end, left, right);
+        long lSum = getSeg(node << 1, start, (start + end) >> 1, left, right);
+        long rSum = getSeg((node << 1) + 1, ((start + end) >> 1) + 1, end, left, right);
         return lSum + rSum;
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder ans = new StringBuilder();
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
 
-        num = new long[n + 1];
-        tree = new long[n * 4];
+        num = new long[N + 1];
+        tree = new long[N * 4];
 
-        for (int i = 1; i <= n; i++) {
+        for (int i = 1; i <= N; i++) {
             num[i] = Long.parseLong(br.readLine());
         }
 
-        segTree(1, 1, n);
+        segTree(1, 1, N);
 
-        for (int i = 0; i < m + k; i++) {
+        long a;
+        for (int i = 0; i < M + K; i++) {
             st = new StringTokenizer(br.readLine());
-            long a = Long.parseLong(st.nextToken());
-            long b = Long.parseLong(st.nextToken());
-            long c = Long.parseLong(st.nextToken());
+            a = Long.parseLong(st.nextToken());
 
-            if (a == 1) updateSeg(1, 1, n, (int) b, c);
-            else ans.append(getSeg(1, 1, n, (int) b, (int) c)).append("\n");
+            if (a == 1) updateSeg(1, 1, N, Integer.parseInt(st.nextToken()), Long.parseLong(st.nextToken()));
+            else
+                ans.append(getSeg(1, 1, N, Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()))).append("\n");
         }
 
         System.out.println(ans);

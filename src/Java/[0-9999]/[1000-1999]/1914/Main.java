@@ -7,11 +7,9 @@ public class Main {
 
     static void hanoi(int from, int to, int size) {
         if (size == 0) return;
-        else {
-            hanoi(from, 6 - from - to, size - 1);
-            ans.append(from).append(' ').append(to).append('\n');
-            hanoi(6 - from - to, to, size - 1);
-        }
+        hanoi(from, 6 - from - to, size - 1);
+        ans.append(from).append(' ').append(to).append('\n');
+        hanoi(6 - from - to, to, size - 1);
     }
 
     public static void main(String[] args) throws IOException {
@@ -24,6 +22,7 @@ public class Main {
         if (N <= 20) {
             hanoi(1, 3, N);
         }
+
         System.out.print(ans);
     }
 }

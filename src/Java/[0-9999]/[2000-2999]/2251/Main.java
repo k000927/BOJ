@@ -4,7 +4,6 @@ import java.util.*;
 public class Main {
     static boolean[][][] visited;
     static boolean[] cVisited;
-    static Queue<Integer> ans;
     static Queue<Bottle> queue;
 
     static class Bottle {
@@ -20,11 +19,8 @@ public class Main {
     static void moveWater(int A, int B, int C) {
         if (!visited[A][B][C]) {
             visited[A][B][C] = true;
-            if (!cVisited[C]) {
-                if (A == 0) {
-                    ans.add(C);
-                    cVisited[C] = true;
-                }
+            if (A == 0) {
+                cVisited[C] = true;
             }
             queue.add(new Bottle(A, B, C));
         }
@@ -44,10 +40,8 @@ public class Main {
 
 
         queue = new LinkedList<>();
-        ans = new PriorityQueue<>();
         queue.add(new Bottle(0, 0, C));
         cVisited[C] = true;
-        ans.add(C);
 
         Bottle b;
         while (!queue.isEmpty()) {
@@ -92,8 +86,8 @@ public class Main {
         }
 
         StringBuilder sb = new StringBuilder();
-        while (!ans.isEmpty()) {
-            sb.append(ans.poll()).append(' ');
+        for (int i = 0; i <= C; i++) {
+            if (cVisited[i]) sb.append(i).append(' ');
         }
 
         System.out.println(sb);

@@ -1,76 +1,78 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+    static BufferedReader br;
+    static BufferedWriter bw;
+    static StringTokenizer st;
+    static StringBuilder sb = new StringBuilder();
     static int N, Q;
-    static double[] view, dView;
-
-    static int convert(String time) {
-        StringTokenizer st = new StringTokenizer(time, ":");
-        int HH = Integer.parseInt(st.nextToken());
-        int MM = Integer.parseInt(st.nextToken());
-        int SS = Integer.parseInt(st.nextToken());
-
-        return HH * 60 * 60 + MM * 60 + SS;
+    static final int END = 60*60*24;
+    static int[] prefixSum;
+    static long[] time;
+    public static void main(String[] args) throws Exception {
+        new Main().solution();
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder ans = new StringBuilder();
-        StringTokenizer st;
+    public void solution() throws Exception {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         N = Integer.parseInt(br.readLine());
-
-        view = new double[86400];
-        dView = new double[86401];
-
-        int start, end;
+        prefixSum = new int[24 * 60 * 60 + 1];
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine(), "-");
+            String line = br.readLine();
+            st = new StringTokenizer(line, " :-");
+            int start = calTime(st);
+            int end = calTime(st);
 
-            start = convert(st.nextToken().strip());
-            end = convert(st.nextToken().strip());
-
-            dView[start]++;
-            dView[end + 1]--;
-
-            if (start > end) {
-                dView[0]++;
-                dView[86400]--;
+            if(start <= end){
+                prefixSum[start]++;
+                prefixSum[end+1]--;
+            }
+            else{
+                prefixSum[start]++;
+                prefixSum[END]--;
+                prefixSum[0]++;
+                prefixSum[end+1]--;
             }
         }
+        for (int i = 1; i <= END; i++) {
+            prefixSum[i] += prefixSum[i-1];
+        }
 
-        double size, sum;
-        view[0] = dView[0];
-        sum = dView[0];
-        for (int i = 1; i < 86400; i++) {
-            sum += dView[i];
-            view[i] = sum + view[i - 1];
+        time = new long[END];
+        for (int i = 0; i < END; i++) {
+            if(i==0) time[0] = prefixSum[0];
+            else time[i] = time[i-1] + prefixSum[i];
         }
 
         Q = Integer.parseInt(br.readLine());
+        while(Q-->0){
+            String line = br.readLine();
+            st = new StringTokenizer(line, " :-");
+            int start = calTime(st);
+            int end = calTime(st);
 
-        for (int i = 0; i < Q; i++) {
-            st = new StringTokenizer(br.readLine(), "-");
+            double avg = 0;
 
-            start = convert(st.nextToken().strip());
-            end = convert(st.nextToken().strip());
-
-            sum = 0;
-            size = 0;
-            if (start > end) {
-                sum = view[end] + view[86399] - view[start];
-                size = 86400 - (end - start + 1);
-            } else {
-                sum = view[end] - view[start];
-                size = (end - start + 1);
+            if(start <= end){
+                if(start != 0) avg = (double) (time[end] - time[start - 1]) / (end+1-start);
+                else avg = (double) time[end] / (end+1-start);
             }
-
-            ans.append(sum / size).append('\n');
+            else{
+                avg = (double) ((time[END - 1] - time[start - 1]) + time[end]) / ((END-start) + (end+1));
+            }
+            sb.append(String.format("%.10f", avg)).append("\n");
         }
 
-        System.out.println(ans);
+        System.out.println(sb.toString());
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+    private int calTime(StringTokenizer st){
+        return 3600 * Integer.parseInt(st.nextToken()) + 60 * Integer.parseInt(st.nextToken()) + Integer.parseInt(st.nextToken());
     }
 }

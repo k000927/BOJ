@@ -5,11 +5,10 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int N;
+    static int N, index, maxDepth;
     static Node[] nodeArr;
-    static int[] min;
-    static int[] max;
-    static int index;
+    static int[] min, max;
+    static boolean[] isRoot;
 
     static class Node {
         Node left, right;
@@ -18,11 +17,17 @@ public class Main {
         }
 
         public void setLeft(int left) {
-            this.left = left == -1 ? null : nodeArr[left];
+            if(left != -1){
+                this.left = nodeArr[left];
+                isRoot[left] = false;
+            }
         }
 
         public void setRight(int right) {
-            this.right = right == -1 ? null : nodeArr[right];
+            if(right != -1){
+                this.right = nodeArr[right];
+                isRoot[right] = false;
+            }
         }
     }
 
@@ -34,6 +39,7 @@ public class Main {
         min[depth] = Math.min(min[depth], index);
         max[depth] = Math.max(max[depth], index);
         index++;
+        maxDepth = Math.max(maxDepth, depth);
 
         if (curNode.right != null) {
             inOrder(curNode.right, depth + 1);
@@ -47,12 +53,13 @@ public class Main {
         N = Integer.parseInt(br.readLine());
 
         nodeArr = new Node[N + 1];
+        isRoot = new boolean[N + 1];
         min = new int[N + 1];
         max = new int[N + 1];
 
         Arrays.fill(min, Integer.MAX_VALUE);
         Arrays.fill(max, Integer.MIN_VALUE);
-
+        Arrays.fill(isRoot, true);
         for (int i = 1; i <= N; i++) {
             nodeArr[i] = new Node();
         }
@@ -68,9 +75,28 @@ public class Main {
             nodeArr[num].setRight(right);
         }
 
-        index = 1;
-        inOrder(nodeArr[1], 1);
+        int root = 0;
+        for (int i = 1; i <= N; i++) {
+            if(isRoot[i]){
+                root = i;
+                break;
+            }
+        }
 
-        System.out.println();
+        index = 1;
+        inOrder(nodeArr[root], 1);
+
+        int maxWidth = Integer.MIN_VALUE;
+        int ansDepth = 0;
+
+        for (int i = 1; i <= maxDepth; i++) {
+            int curWidth = max[i] - min[i] + 1;
+            if (curWidth > maxWidth) {
+                maxWidth = curWidth;
+                ansDepth = i;
+            }
+        }
+
+        System.out.println(ansDepth + " " + maxWidth);
     }
 }

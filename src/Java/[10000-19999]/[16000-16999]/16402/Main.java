@@ -73,6 +73,7 @@ public class Main {
             }
         }
 
+
         PriorityQueue<String> ans = new PriorityQueue<>();
         for (int i = 0; i < N; i++) {
             if (parent[i] == i) {

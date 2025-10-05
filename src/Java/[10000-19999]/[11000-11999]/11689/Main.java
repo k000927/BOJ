@@ -9,7 +9,7 @@ public class Main {
         N = Long.parseLong(br.readLine());
 
         long res = N;
-        for (long i = 2; i < Math.sqrt(N); i++) {
+        for (long i = 2; i <= Math.sqrt(N); i++) {
             if (N % i == 0) {
                 res -= res / i;
                 while (N % i == 0) N /= i;

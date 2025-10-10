@@ -1,85 +1,41 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
-    static Employee[] employees;
-    static int[] dp;
-
-    static class Employee implements Comparable<Employee> {
-        int num, level;
-        List<Employee> children;
-        Employee parent;
-
-        Employee(int num) {
-            this.num = num;
-            children = new ArrayList<>();
-        }
-
-        public void setParent(Employee parent) {
-            this.parent = parent;
-        }
-
-        public void addChild(Employee child) {
-            this.children.add(child);
-        }
-
-        @Override
-        public int compareTo(Employee e) {
-            return Integer.compare(e.level, this.level);
-        }
-    }
-
+    private static List<Integer>[] tree;
+    private static int[] dp;
+    private static int n;
     public static void main(String[] args) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
 
-        N = Integer.parseInt(br.readLine());
-        dp = new int[N];
-        employees = new Employee[N];
+        n = Integer.parseInt(br.readLine());
+        dp = new int[n];
+        tree = new ArrayList[n];
 
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            employees[i] = new Employee(i);
-            int parent = Integer.parseInt(st.nextToken());
-            if (parent != -1) {
-                employees[parent].addChild(employees[i]);
-                employees[i].setParent(employees[parent]);
-            }
+        for (int i = 0; i < n; i++) {
+            tree[i] = new ArrayList<>();
         }
-
-        employees[0].level = 0;
-        Queue<Employee> levelQueue = new LinkedList<>();
-        Queue<Employee> queue = new PriorityQueue<>();
-        levelQueue.add(employees[0]);
-
-        while (!levelQueue.isEmpty()) {
-            Employee curr = levelQueue.poll();
-            for (Employee child : curr.children) {
-                child.level = curr.level + 1;
-                levelQueue.add(child);
-                if (child.children.isEmpty()) {
-                    queue.add(child);
-                }
-            }
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        st.nextToken();
+        for (int i = 1; i < n; i++) {
+            tree[Integer.parseInt(st.nextToken())].add(i);
         }
-
-        while (true) {
-            Employee curr = queue.poll();
-
-            if (curr.parent == null) {
-                System.out.println(dp[curr.num]);
-                break;
-            }
-
-            if (curr.children.isEmpty()) {
-                dp[curr.num] = 1;
-            }
-
-            dp[curr.parent.num] += dp[curr.num];
-            queue.add(curr.parent);
+        bw.write(String.valueOf(dfs(0)));
+        bw.flush();
+    }
+    private static int dfs(int cur) {
+        int cnt = 0, max = 0;
+        PriorityQueue<int[]> q = new PriorityQueue<>((o1, o2) -> o2[1] - o1[1]);
+        for (int next : tree[cur]) {
+            dp[next] = dfs(next);
+            q.add(new int[]{next, dp[next]});
         }
+        while (!q.isEmpty()) {
+            int[] node = q.poll();
+            cnt++;
+            max = Math.max(max, node[1] + cnt);
+        }
+        return max;
     }
 }

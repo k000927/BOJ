@@ -82,30 +82,29 @@ public class Main {
                 nby -= dy[dir];
             }
 
+            if (nrx == nbx && nry == nby) {
+                nrx = red.x;
+                nry = red.y;
+                nbx = blue.x;
+                nby = blue.y;
+                break;
+            }
 
+            if ((isRedInHole || (nrx == red.x && nry == red.y)) && nbx == blue.x && nby == blue.y) {
+                break;
+            }
+            if (!isRedInHole) {
+                red.x = nrx;
+                red.y = nry;
+            }
+            blue.x = nbx;
+            blue.y = nby;
         }
 
         if (isRedInHole)
             return 1;
         else
             return 0;
-    }
-
-    static void print(Pos red, Pos blue) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (red.x == i && red.y == j) {
-                    sb.append('R');
-                } else if (blue.x == i && blue.y == j) {
-                    sb.append('B');
-                } else {
-                    sb.append(map[i][j]);
-                }
-            }
-            sb.append('\n');
-        }
-        System.out.println(sb);
     }
 
     public static void main(String[] args) throws IOException {
@@ -147,7 +146,6 @@ public class Main {
                 Pos nb = new Pos(cur.blue.x, cur.blue.y);
 
                 int result = move(nr, nb, i);
-                print(nr, nb);
                 if (result == 0) {
                     Node next = new Node(nr, nb, cur.count + 1);
                     if (visited.contains(next))
@@ -157,8 +155,6 @@ public class Main {
                 } else if (result == 1) {
                     System.out.println(cur.count + 1);
                     return;
-                } else {
-                    continue;
                 }
             }
         }

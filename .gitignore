@@ -4,3 +4,10 @@
 .idea
 out
 .DS_Store
+package-lock.json
+.DS_Store
+.DS_Store
+package.json
+node_modules/.package-lock.json
+node_modules/fs/README.md
+src/.DS_Store
